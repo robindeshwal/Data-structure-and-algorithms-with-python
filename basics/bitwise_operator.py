@@ -1,5 +1,16 @@
 class BitwiseOperator:
+  """
+  Points:
+  if (n&1) == 0:
+    even
+  else:
+    odd
 
+  if (n^1) == n+1:
+    even
+  if (n^1) == n-1:
+    odd
+  """
   def __init__(self) -> None:
     pass
 

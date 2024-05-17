@@ -158,20 +158,98 @@ class Practice:
 
     print(better_solution(a, b, c))
 
+  def add_two_numbers(self):
+    """
+    add two numbers represented by two arrays.
+    [1,2], and [2, 1]
+    output: [3,3]
+    """
+    arr1 = [9, 5, 4, 9]
+    arr2 = [2, 1, 4]
+    # 9763
+
+    i = len(arr1) - 1
+    j = len(arr2) - 1
+
+    carry = 0
+    result = []
+    while (i >= 0 and j >= 0):
+      temp = arr1[i] + arr2[j] + carry
+      digit = temp % 10
+      result.insert(0, digit)
+      carry = temp // 10
+      i -= 1
+      j -= 1
+    while (i >= 0):
+      temp = arr1[i] + carry
+      digit = temp % 10
+      result.insert(0, digit)
+      carry = temp // 10
+      i -= 1
+
+    while (j >= 0):
+      temp = arr1[j] + carry
+      digit = temp % 10
+      result.insert(0, digit)
+      carry = temp // 10
+      j -= 1
+    if carry:
+      result.insert(0, carry)
+
+    print(result)
+    return result
+
   def factorial_large_number(self):
     """
     find factorial of large number.
     """
+    n = 200
+    result = [1]
+    carry = 0
+    for i in range(2, n + 1):
+      length = len(result)
+      while (length > 0):
+        temp = result[length - 1] * i + carry
+        result[length - 1] = temp % 10
+        carry = temp // 10
+        length -= 1
+      while (carry):
+        result.insert(0, carry % 10)
+        carry = carry // 10
+    result = "".join(map(str, result))
+    print(result)
+    return result
 
   def spiral_print(self):
     """
     spiral print
+    1 2 3
+    4 5 6
+    7 8 9
+    10 11 12
+
+    Leetcode: 54
     """
 
   def wave_print(self):
     """
-    wave_print
+    wave print 2D array.
+    1 2 3 4
+    5 6 7 8
+    9 10 11 12
+
+    output: 1 5 9 10 6 2 3 7 11 12 8 4
     """
+    array = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]
+    rows = len(array)
+    columns = len(array[0])
+
+    for col in range(columns):
+      for row in range(rows):
+        if col % 2 == 0:
+          print(array[row][col], end=" ")
+        else:
+          print(array[rows - row - 1][col], end=" ")
 
   def rotate_matrix(self):
     """
