@@ -1,6 +1,7 @@
 from .practice import Sorting
 
-print("sorting")
 sorting = Sorting()
 
-sorting.selection_sort()
+# sorting.selection_sort()
+# sorting.bubble_sort()
+sorting.insertion_sort()
