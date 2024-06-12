@@ -191,45 +191,155 @@ class Questions:
     """
     longest common prefix - 14
     """
+    strs = ["flower", "flow", "flight"]
+    ans = ""
+
+    i = 0
+    while True:
+      curr_ch = 0
+      for s in range(len(strs)):
+        if i >= len(strs[s]):
+          curr_ch = 0
+          break
+        if curr_ch == 0:
+          curr_ch = strs[s][i]
+        else:
+          if strs[s][i] != curr_ch:
+            curr_ch = 0
+            break
+      if curr_ch == 0:
+        break
+      i += 1
+      ans += curr_ch
+    return ans
+
+  def reverse_vowels(self):
     """
     reverse vowels of a string - 345
     """
+
+  def isomporphic_str(self):
     """
     Isomorphic string.
     """
+    s = "egg"
+    t = "add"
+
+    def using_key_value(self):
+      dic = {}
+  
+      for i in range(len(s)):
+        if s[i] in dic:
+          if dic[s[i]] != t[i]:
+            return False
+        else:
+          if t[i] in dic.values():
+            return False
+          dic[s[i]] = t[i]
+  
+      return True
+
+    def using_char_hashing(self):
+      ""
+
+  def reorganise_str(self):
     """
     reorganise string.
+    s = "aab" => output = "aba"
+    s = "aaab" => output = ""
     """
+    s = "aab"
+
+    def reorganizeString(s):
+      sHash = list(0 for _ in range(26))
+
+      for i in range(len(s)):
+          sHash[ord(s[i]) - ord('a')]
+
+      max_freq = - 2**31
+      most_freq_char = ""
+      for i in range(26):
+          if sHash[i] > max_freq:
+              max_freq = sHash[i]
+              most_freq_char = chr(i + ord("a"))
+
+      index = 0
+      temp = []
+      while max_freq > 0 and index < len(s):
+          temp[index] = most_freq_char
+          max_freq -= 1
+          index += 2
+
+      if (max_freq != 0):
+          return ""
+
+      sHash[ord(most_freq_char) - ord('a')] = 0
+
+      for i in range(26):
+          while(sHash[i] > 0):
+              index = 1 if index >= len(s) else index
+              temp[index] = chr(ord(0) + 'a')
+              index += 2
+
+      return "".join(temp)
+    
+    def using_prioprity_queue(self):
+      ""
+
+    def using_greedy(self):
+      ""
+
+  def group_anagrams(self):
     """
     Group Anagrams.
     """
+
+  def longest_palindromic(self):
     """
     Longest palindromic substring.
     """
+
+  def first_occurance_index(self):
     """
     find index of first occurance in a string
     """
+
+  def string_compression(self):
     """
-    string compression.
+    string compression. 443
     """
+
+  def str_to_int(self):
     """
     string to integer.
     """
+
+  def int_to_roman(self):
     """
     integer to roman.
     """
+
+  def zig_zag(self):
     """
     Zig-zag conversion.
     """
+
+  def largest_number(self):
     """
     largest number - 179 leetcode
     """
+
+  def custom_sort(self):
     """
     custom sort string - 791
     """
+
+  def verify_alien(self):
     """
     verify alien dictionary. - 953
     """
+
+  def longest_word(self):
     """
     longest word in dictionary through deleting - 524
     """
