@@ -227,5 +227,94 @@ class Practice:
     """
     leetcode: 17
     Letter combinations of a phone number.
-     
     """
+    dic = {
+        2: "abc",
+        3: "def",
+        4: "ghi",
+        5: "jkl",
+        6: "mno",
+        7: "pqrs",
+        8: "tuv",
+        9: "wxyz"
+    }
+
+    def solve(digits, idx, output, ans):
+      # base case
+      if idx >= len(digits):
+        ans.append("".join(output))
+        return
+
+      # solve one case
+      digit = ord(digits[idx]) - ord("0")
+      value = dic[digit]
+      for i in range(len(value)):
+        ch = value[i]
+        output.append(ch)
+        solve(digits, idx + 1, output, ans)
+        output.pop()
+
+    digits = "23"
+
+    idx = 0
+    output = []
+    ans = []
+    if digits == "":
+      return ans
+
+    solve(digits, idx, output, ans)
+    print(ans)
+
+  def sudoku_solver(self):
+    """
+    Do not return anything, modify board in-place instead.
+    """
+
+    def isSafe(value, board, curr_row, curr_col):
+      # row check
+      for col in range(9):
+        if board[curr_row][col] == value:
+          return False
+
+      # col check
+      for row in range(9):
+        if board[row][curr_col] == value:
+          return False
+
+      #  3*3 box
+      for i in range(9):
+        # [i][j] = [3*(curr_row//3) + i//3][3*(curr_col//3) + i%3]
+        if board[3 * (curr_row // 3) + i // 3][3 * (curr_col // 3) +
+                                               i % 3] == value:
+          return False
+      return True
+
+    def solve(board, n):
+      for i in range(n):
+        for j in range(n):
+          # check available
+          if board[i][j] == ".":
+            #  loop for inserting value.
+            for value in range(1, 10):
+              value = str(value)
+              if isSafe(value, board, i, j): 
+                board[i][j] = value
+                if solve(board, n):
+                  return True
+                board[i][j] = "."
+            return False
+      return True
+
+    board = [["5", "3", ".", ".", "7", ".", ".", ".", "."],
+             ["6", ".", ".", "1", "9", "5", ".", ".", "."],
+             [".", "9", "8", ".", ".", ".", ".", "6", "."],
+             ["8", ".", ".", ".", "6", ".", ".", ".", "3"],
+             ["4", ".", ".", "8", ".", "3", ".", ".", "1"],
+             ["7", ".", ".", ".", "2", ".", ".", ".", "6"],
+             [".", "6", ".", ".", ".", ".", "2", "8", "."],
+             [".", ".", ".", "4", "1", "9", ".", ".", "5"],
+             [".", ".", ".", ".", "8", ".", ".", "7", "9"]]
+    n = len(board)
+
+    solve(board, n)
+    print(board)
