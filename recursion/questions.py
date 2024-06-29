@@ -602,4 +602,7 @@ class Questions:
 
       return ans
 
+    n = 1
+    k = 6
+    target = 3
     return solve(n, target)
