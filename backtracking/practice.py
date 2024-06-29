@@ -297,7 +297,7 @@ class Practice:
             #  loop for inserting value.
             for value in range(1, 10):
               value = str(value)
-              if isSafe(value, board, i, j): 
+              if isSafe(value, board, i, j):
                 board[i][j] = value
                 if solve(board, n):
                   return True

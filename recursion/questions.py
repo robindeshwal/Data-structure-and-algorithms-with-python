@@ -1,4 +1,5 @@
 import sys
+import math
 
 
 class Questions:
@@ -399,6 +400,59 @@ class Questions:
     Input: num = 12345
     Output: "Twelve Thousand Three Hundred Forty Five"
     """
+    dic = {
+        1000000000: "Billion",
+        1000000: "Million",
+        1000: "Thousand",
+        100: "Hundred",
+        90: "Ninety",
+        80: "Eighty",
+        70: "Seventy",
+        60: "Sixty",
+        50: "Fifty",
+        40: "Forty",
+        30: "Thirty",
+        20: "Twenty",
+        19: "Nineteen",
+        18: "Eighteen",
+        17: "Seventeen",
+        16: "Sixteen",
+        15: "Fifteen",
+        14: "Fourteen",
+        13: "Thirteen",
+        12: "Twelve",
+        11: "Eleven",
+        10: "Ten",
+        9: "Nine",
+        8: "Eight",
+        7: "Seven",
+        6: "Six",
+        5: "Five",
+        4: "Four",
+        3: "Three",
+        2: "Two",
+        1: "One"
+    }
+    num = 123456
+
+    def numberToWords(num):
+      if num == 0:
+        return "Zero"
+      for it in dic.items():
+        if num >= it[0]:
+          stringA = ""
+          if num >= 100:
+            stringA = numberToWords(num // it[0])
+            stringA += " "
+          stringB = it[1]
+
+          stringC = ""
+          if num % it[0] != 0:
+            stringC = " " + numberToWords(num % it[0])
+
+          return stringA + stringB + stringC
+
+    print(numberToWords(num))
 
   def wild_card(self):
     """
@@ -410,6 +464,46 @@ class Questions:
     '*' Matches any sequence of characters (including the empty sequence).
     The matching should cover the entire input string (not partial).
     """
+    s = "abcdefg"
+    p = "ab*fg"
+
+    s = "aa"
+    p = "a"
+
+    def solve(si, pi):
+      # base
+      if si == len(s) and pi == len(p):
+        return True
+
+      if si == len(s) and pi < len(p):
+        while pi < len(p):
+          if p[pi] != '*':
+            return False
+          pi += 1
+        return True
+
+      if si < len(s) and pi == len(p):
+        return False
+
+      # single character matching
+      if s[si] == p[pi] or '?' == p[pi]:
+        return solve(si + 1, pi + 1)
+
+      if p[pi] == "*":
+        # treat '*' as empty or null
+        case_1 = solve(si, pi + 1)
+
+        # let '*' consume one char.
+        case_2 = solve(si + 1, pi)
+
+        return case_1 | case_2
+
+      # char doesn't match
+      return False
+
+    si = 0
+    pi = 0
+    return solve(si, pi)
 
   def perfect_square(self):
     """
@@ -420,4 +514,92 @@ class Questions:
     squares while 3 and 11 are not.
     """
 
-  
+    def solve(n):
+      #  base
+      if n == 0:
+        return 1
+      if n < 0:
+        return 0
+
+      i = 1
+      end = math.sqrt(n)
+      ans = 2**31 - 1
+      while i <= end:
+        perfect_square = i * i
+        numberPerfectSquare = 1 + solve(n - perfect_square)
+        if numberPerfectSquare < ans:
+          ans = numberPerfectSquare
+        i += 1
+      return ans
+
+    n = 13
+    return solve(n) - 1
+
+  def minimum_cost_for_tickets(self):
+    """
+    983 leetcode
+    Input: days = [1,4,6,7,8,20], costs = [2,7,15]
+    Output: 11
+    Explanation: For example, here is one way to buy passes that lets you travel your travel plan:
+    On day 1, you bought a 1-day pass for costs[0] = $2, which covered day 1.
+    On day 3, you bought a 7-day pass for costs[1] = $7, which covered days 3, 4, ..., 9.
+    On day 20, you bought a 1-day pass for costs[0] = $2, which covered day 20.
+    In total, you spent $11 and covered all the days of your travel.
+    """
+    days = [2, 5]
+    costs = [1, 4, 25]
+
+    def solve(days, i):
+      # Base
+      if i >= len(days):
+        return 0
+
+      # 1 day pass
+      cost1 = costs[0] + solve(days, i + 1)
+
+      # 7 day pass
+      passEndDay = days[i] + 7 - 1
+      j = i
+      while j < len(days) and days[j] <= passEndDay:
+        j += 1
+      cost7 = costs[1] + solve(days, j)
+
+      # 30 day pass
+      passEndDay = days[i] + 30 - 1
+      j = i
+      while j < len(days) and days[j] <= passEndDay:
+        j += 1
+      cost30 = costs[2] + solve(days, j)
+
+      return min(cost1, cost7, cost30)
+
+    i = 0
+    return solve(days, i)
+
+  def dice_roll_target(self):
+    """
+    1155 leetcode.
+    Input: n = 1, k = 6, target = 3
+    Output: 1
+    Explanation: You throw one die with 6 faces.
+    There is only one way to get a sum of 3.
+    """
+
+    def solve(n, target):
+      # base
+      if target < 0:
+        return 0
+      if n == 0 and target == 0:
+        return 1
+      if n == 0 and target != 0:
+        return 0
+      if n != 0 and target == 0:
+        return 0
+
+      ans = 0
+      for i in range(1, k + 1):
+        ans = ans + solve(n - 1, target - i)
+
+      return ans
+
+    return solve(n, target)
