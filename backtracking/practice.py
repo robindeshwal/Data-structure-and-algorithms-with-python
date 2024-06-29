@@ -318,3 +318,4 @@ class Practice:
 
     solve(board, n)
     print(board)
+
