@@ -10,4 +10,7 @@ prct = Practice()
 
 ques = Questions()
 
-ques.combination_sum()
+# ques.combination_sum()
+# ques.combination_sum_2()
+# ques.permutations_2()
+ques.beautiful_arrangement()

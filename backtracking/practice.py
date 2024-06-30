@@ -5,6 +5,7 @@ class Practice:
 
   def permutations(self):
     """
+    46. leetcode
     string = "abc"
     all permutations of a string: ["abc", "bca", "bac", "cab", "cab", "cba", "acb"]
 
@@ -318,4 +319,3 @@ class Practice:
 
     solve(board, n)
     print(board)
-

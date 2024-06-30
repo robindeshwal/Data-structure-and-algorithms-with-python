@@ -106,3 +106,118 @@ class Questions:
     temp = []
     solve(0, target, temp, ans)
     return ans
+
+  def permutations_2(self):
+    """
+    47. leetcode
+    Given a collection of numbers, nums, that might contain duplicates,
+    return all possible unique permutations in any order.
+
+    Input: nums = [1,1,2]
+    Output:
+    [[1,1,2],
+     [1,2,1],
+     [2,1,1]]
+    """
+
+    def solve(nums, start, end, ans):
+      #  base
+      if start == end:
+        ans.append(nums[:])
+        return
+
+      visited = {}
+      for i in range(start, end):
+        if nums[i] in visited and visited[nums[i]]:
+          continue
+        visited[nums[i]] = True
+        nums[start], nums[i] = nums[i], nums[start]
+        solve(nums, start + 1, end, ans)
+        nums[start], nums[i] = nums[i], nums[start]
+
+    nums = [1, 1, 2]
+    ans = []
+    solve(nums, 0, len(nums), ans)
+    return ans
+
+  def beautiful_arrangement(self):
+    """
+    526: Leetcode
+    Suppose you have n integers labeled 1 through n. A permutation of those n integers 
+    perm (1-indexed) is considered a beautiful arrangement if for every i (1 <= i <= n), 
+    either of the following is true:
+
+    perm[i] is divisible by i.
+    i is divisible by perm[i].
+
+    Input: n = 2
+    Output: 2
+    Explanation:
+    The first beautiful arrangement is [1,2]:
+        - perm[1] = 1 is divisible by i = 1
+        - perm[2] = 2 is divisible by i = 2
+    The second beautiful arrangement is [2,1]:
+        - perm[1] = 2 is divisible by i = 1
+        - i = 2 is divisible by perm[2] = 1
+    """
+
+    def solve(temp, n, ans, currNum):
+      # base
+      if currNum == n + 1:
+        ans[0] += 1
+        return
+
+      for i in range(1, n + 1):
+        if temp[i - 1] == 0 and (currNum % i == 0 or i % currNum == 0):
+          temp[i - 1] = currNum
+          solve(temp, n, ans, currNum + 1)
+          temp[i - 1] = 0
+
+    n = 3
+    ans = [0]
+    temp = [0] * n
+    solve(temp, n, ans, 1)
+    return ans[0]
+
+  def distribute_repeatine_integers(self):
+    """
+    1655: Leetcode
+    You are given an array of n integers, nums, where there are at most 50 unique values in 
+    the array. You are also given an array of m customer order quantities, quantity, 
+    where quantity[i] is the amount of integers the ith customer ordered. Determine if it is
+    possible to distribute nums such that:
+
+    Input: nums = [1,2,3,4], quantity = [2]
+    Output: false
+    Explanation: The 0th customer cannot be given two different integers.
+    """
+
+    def solve(c, q, iq):
+      # base
+      if iq == len(quantity):
+        return True
+
+      for i in range(len(c)):
+        if c[i] >= quantity[iq]:
+          c[i] -= quantity[iq]
+          if solve(c, q, iq + 1):
+            return True
+          c[i] += quantity[iq]
+
+      return False
+
+    nums = [1, 1, 2, 2, 2, 2, 3, 3]
+    quantity = [2, 2, 3]
+
+    values_map = {}
+    for i in range(len(nums)):
+      if nums[i] in values_map:
+        values_map[nums[i]] += 1
+      else:
+        values_map[nums[i]] = 1
+
+    counts = list(values_map.values())
+
+    quantity.sort(reverse=True)
+
+    return solve(counts, quantity, 0)
