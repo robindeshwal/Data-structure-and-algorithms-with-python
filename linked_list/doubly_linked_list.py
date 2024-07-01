@@ -2,12 +2,11 @@ class Node:
 
   def __init__(self, data):
     self.data = data
+    self.prev = None
     self.next = None
 
 
 class LinkedList:
-  """
-  """
 
   def __init__(self):
     self.head = None
@@ -15,9 +14,9 @@ class LinkedList:
 
   def is_ll_empty(self):
     if self.head is None:
+      print("List is empty.")
       return True
-    else:
-      return False
+    return False
 
   def print_ll(self):
     temp = self.head
@@ -26,53 +25,42 @@ class LinkedList:
       temp = temp.next
 
   def ll_length(self):
+    len = 0
     currNode = self.head
-    length = 0
     while currNode:
-      length += 1
+      len += 1
       currNode = currNode.next
-    return length
 
-  def insert(self, data):
+    return len
+
+  def insertAtHead(self, data):
     newNode = Node(data)
     if self.head is None:
       self.head = newNode
       self.tail = newNode
       return
 
-    currNode = self.head
-    while currNode.next:
-      currNode = currNode.next
-
-    currNode.next = newNode
-    self.tail = newNode
-
-  def insertAtHead(self, data):
-    """
-    add a new node at head, pre insert head.
-    """
-    newNode = Node(data)
-    if not self.head:
-      self.tail = newNode
+    self.head.prev = newNode
     newNode.next = self.head
     self.head = newNode
 
   def insertAtTail(self, data):
-    """
-    insert at the right most end in ll.
-    """
     newNode = Node(data)
-    if not self.tail:
-      self.tail = newNode
+    if self.head is None:
       self.head = newNode
+      self.tail = newNode
+      return
+
     self.tail.next = newNode
+    newNode.prev = self.tail
     self.tail = newNode
 
+  def insert(self, data):
+    self.insertAtTail(data)
+
   def insertAtPosition(self, position, data):
-    """
-    """
     if position < 0 or position > self.ll_length():
-      print("Invalid position.")
+      print("Invalid Position.")
       return
 
     if position == 0:
@@ -85,36 +73,44 @@ class LinkedList:
 
     i = 1
     currNode = self.head
+    prevNode = None
+    newNode = Node(data)
     while True:
-      if i == position:
+      if i == position + 1:
+        prevNode.next = newNode
+        newNode.prev = prevNode
+        newNode.next = currNode
+        currNode.prev = newNode
         break
+      prevNode = currNode
       currNode = currNode.next
       i += 1
 
-    newNode = Node(data)
-    newNode.next = currNode.next
-    currNode.next = newNode
-
-  def insertAfterValue(self):
-    """
-    """
-
   def deleteHead(self):
-    """
-    """
     if self.is_ll_empty():
-      print("List is Empty")
       return
 
-    previousHead = self.head
-    self.head = self.head.next
-    previousHead.next = None
+    nextHead = self.head.next
+    if nextHead:
+      nextHead.prev = None
+    self.head = nextHead
 
-  def deleteAt(self, position):
-    """
-    """
+  def deleteTail(self):
+    if self.is_ll_empty():
+      return
+
+    if self.ll_length() == 1:
+      self.head = None
+      self.tail = None
+      return
+
+    newTail = self.tail.prev
+    newTail.next = None
+    self.tail = newTail
+
+  def deleteAtPosition(self, position):
     if position < 0 or position > self.ll_length():
-      print("Invalid position")
+      print("Invalid position.")
       return
 
     if position == 0:
@@ -122,33 +118,18 @@ class LinkedList:
       return
 
     if position == self.ll_length():
-      self.deleteLast()
+      self.deleteTail()
       return
 
-    i = 0
+    i = 1
     currNode = self.head
-    previousNode = None
+    prevNode = None
     while True:
-      if i == position:
-        previousNode.next = currNode.next
+      if i == position + 1:
+        prevNode.next = currNode.next
+        currNode.next.prev = prevNode
         currNode.next = None
-        break
-      previousNode = currNode
+        return
+      prevNode = currNode
       currNode = currNode.next
       i += 1
-
-  def deleteLast(self):
-    """
-    """
-    if self.is_ll_empty():
-      print("List is Empty")
-      return
-
-    currNode = self.head
-    while True:
-      if currNode.next == self.tail:
-        break
-      currNode = currNode.next
-
-    self.tail = currNode
-    currNode.next = None
