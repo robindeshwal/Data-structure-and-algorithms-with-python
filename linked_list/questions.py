@@ -8,6 +8,14 @@ class Questions:
   def __init__(self):
     self.ll = LinkedList()
 
+  def lengthLL(self, head):
+    i = 0
+    temp = head
+    while temp:
+      temp = temp.next
+      i += 1
+    return i
+
   def reverse_ll(self, head):
     """
     206: Leetcode
@@ -611,4 +619,282 @@ class Questions:
 
   def flatten_ll(self):
     """
+    GFG: Flattening a Linked List
+    Given a Linked List of size n, where every node represents a sub-linked-list and contains 
+    two pointers:
+    (i) a next pointer to the next node,
+    (ii) a bottom pointer to a linked list where this node is head.
+    Each of the sub-linked-list is in sorted order.
+    Flatten the Link List such that all the nodes appear in a single level while maintaining 
+    the sorted order.
     """
+
+    def mergeLL(l1, l2):
+      if not l1:
+        return l2
+      if not l2:
+        return l1
+
+      ans = None
+      if l1.data <= l2.data:
+        ans = l1
+        ans.bottom = mergeLL(l1.bottom, l2)
+      else:
+        ans = l2
+        ans.bottom = mergeLL(l1, l2.bottom)
+
+      return ans
+
+    def flatten(root):
+      #Your code here
+      if not root or not root.next:
+        return root
+
+      # merging from the last using recursion.
+      root.next = flatten(root.next)
+
+      root = mergeLL(root, root.next)
+
+      return root
+
+  def clone_ll(self):
+    """
+    138: leetcode -> Copy List with Random Pointer.
+    """
+
+    def solve_using_map(head, mapping):
+      if not head:
+        return head
+
+      newHead = Node(head.val)
+      mapping[head] = newHead
+
+      newHead.next = solve_using_map(head.next, mapping)
+
+      if head.random:
+        newHead.random = mapping[head.random]
+      return newHead
+
+    def solve_without_map(head):
+      if not head:
+        return head
+
+      #  clone A -> A'
+      it = head
+      while it:
+        clonedNode = Node(it.val)
+        clonedNode.next = it.next
+        it.next = clonedNode
+        it = it.next.next
+
+      # Assign random linkes on A' with the help of A.
+      # it.next.random = it.random.next
+
+      it = head
+      while it:
+        clonedNode = it.next
+        clonedNode.random = it.random.next if it.random else None
+
+        it = it.next.next
+
+      #  Detach A' and A.
+      it = head
+      clonedHead = it.next
+      result = clonedHead
+      while it:
+        temp = it.next
+        it.next = it.next.next
+        if temp.next:
+          temp.next = temp.next.next
+        clonedHead = temp
+
+        it = it.next
+
+      return result
+
+    head = self.ll.head
+
+    mapping = {}
+    return solve_using_map(head, mapping)
+
+  def rotate_list(self):
+    """
+    61: Leetcode
+    Given the head of a linked list, rotate the list to the right by k places.
+
+    Input: head = [1,2,3,4,5], k = 2
+    Output: [4,5,1,2,3]
+
+    steps:
+    1 -> 2 -> 3 -> 4 -> 5
+    5 -> 1 -> 2 -> 3 -> 4
+    4 -> 5 -> 1 -> 2 -> 3
+    """
+
+    head = self.ll.head
+    k = 2
+
+    if not head:
+      return head
+
+    length = self.lengthLL(head)
+    rotate = k % length
+    if rotate == 0:
+      return head
+
+    newLastNodePos = length - rotate - 1
+
+    newLastNode = head
+
+    for i in range(newLastNodePos):
+      newLastNode = newLastNode.next
+
+    newHead = newLastNode.next
+    newLastNode.next = None
+
+    it = newHead
+    while it.next:
+      it = it.next
+
+    it.next = head
+
+    return newHead
+
+  def delete_n_nodes_after_m_nodes(self):
+    """
+    GFG: Delete N nodes after M nodes of a linked list.
+
+    Given a linked list, delete N nodes after skipping M nodes of a linked list until the 
+    last of the linked list.
+    """
+
+    def skipMdeleteN(head, M, N):
+      # Code here
+      if not head:
+        return head
+
+      it = head
+      for i in range(M - 1):
+        # if m nodes are not available.
+        if not it:
+          return
+        it = it.next
+
+      # now it is on mth node.
+      if not it:
+        return
+
+      mthNode = it
+      it = mthNode.next
+      for i in range(N):
+        if not it:
+          break
+        temp = it.next
+        del it
+        it = temp
+
+      mthNode.next = it
+
+      return skipMdeleteN(it, M, N)
+
+  def find_min_max(self):
+    """
+    2058: Leetcode -> Find the Minimum and Maximum Number of Nodes Between Critical Points
+
+    A critical point in a linked list is defined as either a local maxima or a local minima.
+    A node is a local maxima if the current node has a value strictly greater than the 
+    previous node and the next node.
+    A node is a local minima if the current node has a value strictly smaller than the previous 
+    node and the next node.
+    Note that a node can only be a local maxima/minima if there exists both a previous node and a 
+    next node.
+
+    Given a linked list head, return an array of length 2 containing [minDistance, maxDistance] 
+    where minDistance is the minimum distance between any two distinct critical points and 
+    maxDistance is the maximum distance between any two distinct critical points. If there are 
+    fewer than two critical points, return [-1, -1].
+    
+    head = [5,3,1,2,5,1,2]
+    """
+
+    head = self.ll.head  # temp head you need to pass the ll.
+
+    ans = [-1, -1]  # minDistance, maxDistance
+    prev = head
+    if not prev:
+      return ans
+
+    curr = head.next
+    if not curr:
+      return ans
+
+    nxt = head.next.next
+    if not nxt:
+      return ans
+
+    firstCP = -1
+    lastCP = -1
+
+    minDist = sys.maxsize
+
+    i = 1
+    while nxt:
+      isCP = (prev.val < curr.val > nxt.val) or (prev.val > curr.val < nxt.val)
+
+      if isCP and firstCP == -1:
+        firstCP = i
+        lastCP = i
+      elif isCP:
+        minDist = min(minDist, i - lastCP)
+        lastCP = i
+      i += 1
+      prev = prev.next
+      curr = curr.next
+      nxt = nxt.next
+
+    if lastCP == firstCP:
+      return ans
+
+    maxDist = lastCP - firstCP
+    return [minDist, maxDist]
+
+  def merge_nodes_bw_zeros(self):
+    """
+    2181: Merge Nodes in Between Zeros
+
+    You are given the head of a linked list, which contains a series of integers separated by 0's.
+    The beginning and end of the linked list will have Node.val == 0.
+
+    For every two consecutive 0's, merge all the nodes lying in between them into a single node 
+    whose value is the sum of all the merged nodes. The modified list should not contain any 0's.
+
+    Return the head of the modified linked list.
+    """
+    head = self.ll.head
+
+    if not head:
+      return
+    slow = head
+    fast = head.next
+    lastNode = None
+
+    sum = 0
+    while fast:
+      if fast.val != 0:
+        sum = sum + fast.val
+      else:
+        slow.val = sum
+        lastNode = slow
+        slow = slow.next
+        sum = 0
+      fast = fast.next
+
+    temp = lastNode.next
+    lastNode.next = None
+
+    while temp:
+      nxt = temp.next
+      del temp
+      temp = nxt
+
+    return head
