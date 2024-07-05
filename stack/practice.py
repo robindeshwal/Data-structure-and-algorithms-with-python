@@ -77,3 +77,67 @@ class Practice:
     total_size = s.size()
 
     solve(s, total_size)
+
+  def insert_at_bottom(self):
+    """
+    """
+
+    def solve(s, x):
+      if s.is_empty():
+        s.push(x)
+        return
+      temp = s.pop()
+      solve(s, x)
+      s.push(temp)
+
+      return s
+
+    s = Stack()
+    s.push(10)
+    s.push(20)
+    s.push(30)
+    s.push(40)
+    s.push(50)
+    s.push(60)
+    s.push(70)
+    s.push(80)
+    s.push(90)
+
+    x = 99
+    solve(s, x)
+
+    # print(s.items)
+
+  def reverse_stack(self):
+    """
+    """
+
+    def insertAtBottom(s, x):
+      if s.is_empty():
+        s.push(x)
+        return
+      temp = s.pop()
+      insertAtBottom(s, x)
+      s.push(temp)
+
+      return s
+
+    def solve(s):
+      # base
+      if s.is_empty():
+        return
+
+      target = s.pop()
+
+      solve(s)
+      insertAtBottom(s, target)
+
+    s = Stack()
+    s.push(10)
+    s.push(20)
+    s.push(30)
+    s.push(40)
+    s.push(50)
+    s.push(60)
+
+    solve(s)

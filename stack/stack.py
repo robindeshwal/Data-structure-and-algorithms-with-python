@@ -22,6 +22,9 @@ class Stack:
   def size(self):
     return len(self.items)
 
+  # Alias for peek
+  top = peek
+
 
 class TwoStackInArray:
 
@@ -71,3 +74,42 @@ class TwoStackInArray:
 
   def printS(self):
     print(self.arr)
+
+
+class MinStack:
+
+  def __init__(self):
+    self.items = []
+
+  def is_empty(self):
+    return len(self.items) == 0
+
+  def push(self, val: int) -> None:
+    if self.is_empty():
+      tup = (val, val)
+      self.items.append(tup)
+    else:
+      tup = (val, min(val, self.getMin()))
+      self.items.append(tup)
+
+  def pop(self) -> None:
+    if not self.is_empty():
+      temp = self.items.pop()
+      return temp[0]
+    else:
+      return None
+
+  def top(self) -> int:
+    if not self.is_empty():
+      return self.items[-1][0]
+    else:
+      return 0
+
+  def getMin(self) -> int:
+    if not self.is_empty():
+      return self.items[-1][1]
+    else:
+      return -1
+
+  # Alias for top
+  peek = top
