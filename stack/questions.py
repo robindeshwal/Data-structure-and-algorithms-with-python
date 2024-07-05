@@ -148,7 +148,7 @@ class Questions:
 
     print(ans)
 
-  def largest_rectangle_histogram(self):
+  def largest_rectangle_histogram(self, heights=[2, 1, 5, 6, 2, 3]):
     """
     84: Leetcode -> Largest Rectangle in Histogram
     Given an array of integers heights representing the histogram's bar height where the width 
@@ -199,7 +199,6 @@ class Questions:
 
       return ans
 
-    heights = [2, 1, 5, 6, 2, 3]
     n = len(heights)
 
     prev = previous_smaller_element(heights, n)
@@ -231,3 +230,266 @@ class Questions:
     while st.is_empty():
       result += st.pop()
     return result
+
+  def minimum_bracket_reversal(self):
+    """
+    GFG: Count the Reversals.
+    """
+
+    def pairing(ch1, ch2):
+      if ch1 == ch2:
+        return 1
+      else:
+        return 2
+
+    s = "}{{}}{{{"
+    # your code here
+    if len(s) % 2 != 0:
+      return -1
+
+    #  remove valid pairs.
+    stack = list()
+    for i in range(len(s)):
+      ch = s[i]
+      if ch == '{':
+        stack.append(ch)
+      else:
+        if len(stack) != 0 and stack[-1] == '{':
+          stack.pop()
+        else:
+          stack.append(ch)
+
+    count = 0
+    while len(stack) != 0:
+      ch1 = stack.pop()
+      ch2 = stack.pop()
+
+      count += pairing(ch1, ch2)
+
+    return count
+
+  def next_greater_in_ll(self):
+    """
+    1019: leetcode ->  Next greater element in linked list.
+    """
+
+    def solve(head):
+      if not head:
+        return []
+      if not head.next:
+        return [head.val]
+
+      ll = list()
+      while head:
+        ll.append(head.val)
+        head = head.next
+
+      n = len(ll)
+      result = [0] * n
+
+      stack = list()
+
+      for i in range(n):
+        while len(stack) != 0 and ll[i] > ll[stack[-1]]:
+          kids = stack[-1]
+          stack.pop()
+          result[kids] = ll[i]
+        stack.append(i)
+
+      return result
+
+    solve(head)
+
+  def celebrity_problem(self):
+    """
+    GFG: The Celebrity Problem.
+    """
+    # code here
+    stack = list()
+
+    # step 1: push all persons in stack.
+    for i in range(n):
+      stack.append(i)
+
+    #  step 2: discard method to get might be celebrity.
+    while len(stack) != 1:
+      a = stack.pop()
+      b = stack.pop()
+
+      if M[a][b]:
+        #  a is not celebrity, b might be
+        stack.append(b)
+      else:
+        stack.append(a)
+
+    #  step 3: check that single person is actually celebrity.
+    mightBeC = stack.pop()
+
+    # celebrity should not know anyone.
+    for i in range(n):
+      if M[mightBeC][i] != 0:
+        return -1
+
+    # every body should know celebrity.
+    for i in range(n):
+      if M[i][mightBeC] == 0 and i != mightBeC:
+        return -1
+
+    return mightBeC
+
+  def online_stack_span(self):
+    """
+    901: Leetcode -> online stock span
+    """
+
+    def __init__(self):
+      self.stock = []
+      self.stack = list()
+
+    def next(self, price):
+      self.stock.append(price)
+      span = 1
+      while self.stack and self.stack[-1][0] <= price:
+        span += self.stack[-1][1]
+        self.stack.pop()
+
+      pair = (price, span)
+      self.stack.append(pair)
+
+      return span
+
+  def simplify_span(self):
+    """
+    71: Leetcode
+    """
+
+    def buildAns(st):
+      if not st:
+        return ""
+      minPath = st.pop()
+      ans = buildAns(st)
+
+      return ans + minPath
+
+    def simplifyPath(self, path):
+      st = list()
+      length = len(path)
+
+      i = 0
+      while i < length:
+        start = i
+        end = i + 1
+        while end < length and path[end] != '/':
+          end += 1
+
+        minPath = path[start:end]
+        i = end
+        if minPath == "/" or minPath == "/.":
+          continue
+        if minPath != "/..":
+          st.append(minPath)
+        elif st:
+          st.pop()
+
+      ans = "/" if not st else ""
+
+      ans += buildAns(st)
+      return ans
+
+  def word_is_valid(self):
+    """
+    1003: Leetcode -> Check If Word Is Valid After Substitutions
+    """
+    s = "aabcbc"
+
+    if s[0] != 'a':
+      return False
+
+    stack = list()
+    for i in range(len(s)):
+      ch = s[i]
+      if ch == "a":
+        stack.append(ch)
+      elif ch == "b":
+        if stack and stack[-1] == 'a':
+          stack.append(ch)
+        else:
+          return False
+      else:
+        if stack and stack[-1] == "b":
+          stack.pop()
+          if stack and stack[-1] == "a":
+            stack.pop()
+          else:
+            return False
+        else:
+          return False
+    return len(stack) == 0
+
+  def decode_string(self):
+    """
+    394: Leetcode -> Decode String.
+    """
+    stack = list()
+    n = len(s)
+
+    for i in range(n):
+      ch = s[i]
+      if ch == ']':
+        strtoRepeat = ""
+        while stack and not stack[-1].isdigit():
+          temp_pop = stack.pop()
+          strtoRepeat += temp_pop if temp_pop != '[' else ''
+        numric = ""
+        while stack and stack[-1].isdigit():
+          numric += stack.pop()
+        rev_numric = int(numric[::-1])
+
+        #  final decoding
+        curr = strtoRepeat * rev_numric
+        stack.append(curr)
+      else:
+        stack.append(str(ch))
+
+    ans = ""
+    while stack:
+      ans += stack.pop()
+
+    return ans[::-1]
+
+  def max_ractangle_binary_matrix(self):
+    """
+    IMP
+    85: Leetcode -> Maximal Rectangle
+    """
+    matrix = [["1", "0", "1", "0", "0"], ["1", "0", "1", "1", "1"],
+              ["1", "1", "1", "1", "1"], ["1", "0", "0", "1", "0"]]
+
+    n = len(matrix)
+    m = len(matrix[0])
+
+    int_matrix = []
+    for i in range(n):
+      temp = []
+      for j in range(m):
+        temp.append(int(matrix[i][j]))
+
+      int_matrix.append(temp)
+
+    area = self.largest_rectangle_histogram(int_matrix[0])
+    for i in range(1, n):
+      for j in range(m):
+        # update curr row with previous values.
+        if int_matrix[i][j]:
+          int_matrix[i][j] += int_matrix[i - 1][j]
+        else:
+          int_matrix[i][j] = 0
+
+      area = max(area, self.largest_rectangle_histogram(int_matrix[i]))
+
+    return area
+
+  def car_fleet(self):
+    """
+    853: Leetcode -> Car Fleet
+    """

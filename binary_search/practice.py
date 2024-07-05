@@ -28,15 +28,11 @@ class BinarySearch:
 
       while (start <= end):
         mid = start + (end - start) // 2
-        print(f'mid: {mid}, arr[mid]: {arr[mid]}, start: {start}, end: {end}')
         if arr[mid] == target:
-          print("i am in if")
           return mid
         elif arr[mid] > target:
-          print("i am in elif")
           end = mid - 1
         else:
-          print("i am in else")
           start = mid - 1
       return -1
 
