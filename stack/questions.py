@@ -1,4 +1,4 @@
-from stack.stack import Stack
+from stack.stack import Stack, NStackInArray
 
 
 class Questions:
@@ -493,3 +493,76 @@ class Questions:
     """
     853: Leetcode -> Car Fleet
     """
+    target = 12
+    position = [10, 8, 0, 5, 3]
+    speed = [2, 4, 1, 1, 3]
+
+    combine = list(zip(position, speed))
+    cars = list(zip(*sorted(combine)))
+
+    stack = list()
+
+    for i in range(len(speed)):
+      pos = cars[0]
+      speed = cars[1]
+      time = (target - pos[i]) / speed[i]
+
+      while stack and time >= stack[-1]:
+        stack.pop()
+
+      stack.append(time)
+
+    return len(stack)
+
+  def car_fleet_2(self):
+    """
+    1776: Leetcode
+    """
+    cars = [[1, 2], [2, 1], [4, 3], [7, 2]]
+
+    n = len(cars)
+    ans = [-1] * n  # collision time of ith car with the next car.
+
+    st = list()
+
+    for i in range(n - 1, -1, -1):
+      while st and cars[st[-1]][1] >= cars[i][1]:
+        st.pop()
+
+      while st:
+        colTime = (cars[st[-1]][0] - cars[i][0]) / (cars[i][1] -
+                                                    cars[st[-1]][1])
+
+        if ans[st[-1]] == -1 or colTime <= ans[st[-1]]:
+          ans[i] = colTime
+          break
+        st.pop()
+
+      st.append(i)
+
+    return ans
+
+  def n_stacks(self):
+    """
+    N stacks in an array.
+    """
+    nStack = NStackInArray(12, 3)
+
+    print(nStack.push(10, 1))
+    print(nStack.push(2, 2))
+    print(nStack.push(3, 3))
+    print(nStack.push(5, 1))
+    print(nStack.push(6, 1))
+    print(nStack.push(7, 2))
+    print(nStack.push(8, 3))
+
+    print(nStack.push(15, 1))
+    print(nStack.push(16, 1))
+    print(nStack.push(17, 2))
+    print(nStack.push(18, 3))
+
+    print(nStack.push(12, 2))
+    print(nStack.push(13, 3))
+    print(nStack.pop(1))
+    print(nStack.pop(2))
+    print(nStack.pop(3))

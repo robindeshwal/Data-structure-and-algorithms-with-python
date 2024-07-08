@@ -113,3 +113,63 @@ class MinStack:
 
   # Alias for top
   peek = top
+
+
+class NStackInArray:
+
+  def __init__(self, size, n):
+    self.size = size
+    self.n = n
+    self.freespot = 0
+    self.arr = [None] * size
+    self.top = [-1] * n
+    self.next = [i + 1 if i != size - 1 else -1 for i in range(size)]
+    self.count = 0
+
+  def push(self, x, m):
+    """
+    x = value
+    m = which stack.
+    """
+    print("count : ", self.count)
+    print("size : ", self.size)
+    if self.freespot == -1 or self.count == self.size:
+      print(f'value {x} is not success to insert in {m}')
+      return False  # stack overflow
+
+    # 1. find index
+    index = self.freespot
+
+    # 2. update freespot
+    self.freespot = self.next[index]
+
+    # 3. insert in array
+    self.arr[index] = x
+
+    # 4. update next
+    self.next[index] = self.top[m - 1]
+
+    # 5. update top
+    self.top[m - 1] = index
+
+    self.count += 1
+
+    return True
+
+  def pop(self, m):
+    """
+    m = pop from which stack
+    """
+    if self.top[m - 1] == -1:
+      return -1  # stack underflow.
+
+    index = self.top[m - 1]
+    self.top[m - 1] = self.next[index]
+    poppedElement = self.arr[index]
+    self.next[index] = self.freespot
+    self.freespot = index
+
+    # Decrement the count
+    self.count -= 1
+
+    return poppedElement

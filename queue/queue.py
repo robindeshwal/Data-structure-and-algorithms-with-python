@@ -129,3 +129,143 @@ class DoublyEndedQueue:
 
   def size(self):
     return len(self.deque)
+
+
+class MyQueueUsingStack:
+
+  def __init__(self):
+    self.s1 = list()
+    self.s2 = list()
+
+  def push(self, x: int) -> None:
+    self.s1.append(x)
+
+  def pop(self) -> int:
+    pop = -1
+    if self.s2:
+      pop = self.s2.pop()
+    else:
+      while self.s1:
+        self.s2.append(self.s1.pop())
+      pop = self.s2.pop()
+    return pop
+
+  def peek(self) -> int:
+    peek = -1
+    if self.s2:
+      peek = self.s2[-1]
+    else:
+      while self.s1:
+        self.s2.append(self.s1.pop())
+      peek = self.s2[-1]
+    return peek
+
+  def empty(self) -> bool:
+    return len(self.s1) == 0 and len(self.s2) == 0
+
+
+class MyStackUsingQueue:
+
+  def __init__(self):
+    self.q = deque()
+
+  def push(self, x: int) -> None:
+    self.q.append(x)
+    for i in range(len(self.q) - 1):
+      temp = self.q.popleft()
+      self.q.append(temp)
+
+  def pop(self) -> int:
+    if self.q:
+      return self.q.popleft()
+    else:
+      return -1
+
+  def top(self) -> int:
+    if self.q:
+      return self.q[0]
+    else:
+      return -1
+
+  def empty(self) -> bool:
+    return len(self.q) == 0
+
+
+class NQueuesInArray:
+
+  def __init__(self, size, k):
+    self.size = size
+    self.k = k
+    self.freespot = 0
+    self.arr = [None] * size
+    self.front = [-1] * k
+    self.rear = [-1] * k
+    self.next = [i + 1 if i != size - 1 else -1 for i in range(size)]
+    self.count = 0
+
+  def push(self, x, qi):
+    """
+    x = value
+    qi = which queue (1-indexed)
+    """
+    # Convert 1-indexed qi to 0-indexed
+    qi -= 1
+
+    if qi < 0 or qi >= self.k:
+      raise IndexError("Queue index out of range")
+
+    # overflow
+    if self.freespot == -1 or self.count == self.size:
+      return False
+
+    # find first free index.
+    index = self.freespot
+
+    # update freespot
+    self.freespot = self.next[index]
+
+    # if first element in qi
+    if self.front[qi] == -1:
+      self.front[qi] = index
+    else:
+      # link new element to that Q's rearest element.
+      self.next[self.rear[qi]] = index
+
+    # update next
+    self.next[index] = -1
+
+    # update rear
+    self.rear[qi] = index
+    self.arr[index] = x
+
+    self.count += 1
+
+    return True
+
+  def pop(self, qi):
+    """
+    qi = pop from which queue. (1-indexed)
+    """
+    # Convert 1-indexed qi to 0-indexed
+    qi -= 1
+
+    if qi < 0 or qi >= self.k:
+      raise IndexError("Queue index out of range")
+
+    # underflow
+    if self.front[qi] == -1:
+      return -1
+
+    # find index to pop
+    index = self.front[qi]
+
+    # update front
+    self.front[qi] = self.next[index]
+
+    # update freespots
+    self.next[index] = self.freespot
+    self.freespot = index
+
+    self.count -= 1
+
+    return self.arr[index]
