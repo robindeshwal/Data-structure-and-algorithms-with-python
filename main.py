@@ -10,7 +10,8 @@
 # from backtracking import main
 # from linked_list import main
 # from stack import main
-from queue import main
+# from queue import main
+from tree import main
 
 if __name__ == "__main__":
   pass
