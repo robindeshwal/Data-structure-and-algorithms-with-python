@@ -15,47 +15,25 @@ class Tree:
   2. using recursively.
   """
 
-  def build_tree_lot(self):
-    """
-    Level order traversal.
-    using queue.
-    """
-    q = deque()
-
-    root = Node(5)
-    q.append(root)
-    q.append(None)
-
-    while q:
-      temp = q.popleft()
-
-      if temp == None:
-        if q:
-          q.append(None)
-
-      if temp.left:
-        q.append(temp.left)
-
-      if temp.right:
-        q.append(temp.right)
-
-    print(q)
-
-  def using_recursion(self):
+  def build_tree(self):
     """
     create root node
     root -> left == recursion()
     root -> right = recursion()
-    """
     data = [90, 20, 11, -1, -1, 13, -1, -1]
+    """
+    data = int(input("Please enter data: "))
 
     if data == -1:
       return None
 
     root = Node(data)
 
-    root.left = self.using_recursion()
-    root.right = self.using_recursion()
+    print(f"Enter the data for left part of {data} node.")
+    root.left = self.build_tree()
+
+    print(f"Enter the data for right part of {data} node.")
+    root.right = self.build_tree()
 
     return root
 
@@ -95,5 +73,71 @@ class Tree:
       return
 
     self.postorder(self.left)
-    self.postorder(self.right)
+    self.portorder(self.right)
     print(root.data)
+
+  def level_order_traversal(self, root):
+    """
+    GFG: Level order traversal.
+    """
+    # Code here
+    q = deque()
+    q.append(root)
+
+    ans = []
+
+    while q:
+      temp = q.popleft()
+
+      ans.append(temp.data)
+
+      if temp.left:
+        q.append(temp.left)
+
+      if temp.right:
+        q.append(temp.right)
+
+    return ans
+
+  def print_tree_lot(self, root):
+    """
+    using queue -> level order traversal.
+    for printing level :
+    10
+    20 40
+    30 50 60
+    """
+    # Code here
+    q = deque()
+
+    q.append(root)
+    q.append(None)
+
+    ans = ""
+    while q:
+      temp = q.popleft()
+
+      if temp == None:
+        ans += "\n"
+        if q:
+          q.append(None)
+      else:
+        ans += str(temp.data) + " "
+
+        if temp.left:
+          q.append(temp.left)
+
+        if temp.right:
+          q.append(temp.right)
+
+    print(ans)
+
+
+if __name__ == "__main__":
+  tree = Tree()
+
+  root = tree.build_tree()
+
+  print(tree.level_order_traversal(root))
+
+  tree.print_tree_lot(root)
