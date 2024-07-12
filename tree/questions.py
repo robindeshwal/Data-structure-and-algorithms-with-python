@@ -12,7 +12,9 @@ class Questions:
     """
     root = self.tree.build_tree()
 
-    self.tree.print_tree_lot(root)
+    # self.tree.print_tree_lot(root)
+    print("morris traversal.")
+    self.tree.morris_traversal(root)
 
   def height(self, root):
     """
@@ -277,16 +279,6 @@ class Questions:
     size = len(postorder)
     po_index = [size - 1]
     return solve(inorder, postorder, size, po_index, 0, size - 1)
-
-  def vertical_order_traversal(self):
-    """
-    987: Leetcode -> Vertical Order Traversal of a Binary Tree
-    """
-
-  def zig_zag_traversal(self):
-    """
-    103: Leetcode -> Binary Tree Zigzag Level Order Traversal
-    """
 
   def top_view(self, root):
     """

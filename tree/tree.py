@@ -99,6 +99,38 @@ class Tree:
 
     return ans
 
+  def morris_traversal(self, root):
+    """
+    GFG: Morris traversal.
+    """
+    ans = []
+    curr = root
+
+    while curr:
+      # left node is Null, then visited it and go right.
+      if curr.left == None:
+        ans.append(curr.data)
+        curr = curr.right
+      # left node is not null
+      else:
+        # find inorder predecessor.
+        pred = curr.left
+        while pred.right != curr and pred.right:
+          pred = pred.right
+
+        # if right node is NUll, then go left after establishing link from pred           to curr.
+        if pred.right == None:
+          pred.right = curr
+          curr = curr.left
+        else:
+          # left is already visited, go right after visiting curr node,
+          pred.right = None
+          ans.append(curr.data)
+          curr = curr.right
+    print(ans)
+    return ans
+        
+
   def print_tree_lot(self, root):
     """
     using queue -> level order traversal.

@@ -9,7 +9,7 @@ t = Tree()
 root = Node(None)
 
 prct = Questions()
-# prct.making_tree()
+prct.making_tree()
 # prct.height()
 
 ques = HW()
