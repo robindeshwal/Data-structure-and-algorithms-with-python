@@ -296,7 +296,101 @@ class Questions:
     h = height(root)
     return h[1]
 
-  def burning_tree(self):
+  def burning_tree(self, root, target):
     """
-    GFG: 
+    GFG: Burning Tree
     """
+
+    def findTargetNode(root, pm, target):
+      if not root:
+        return
+
+      # level order traversal.
+      q = deque()
+      targetNode = None
+      q.append(root)
+      pm[root] = None
+
+      while q:
+        front = q.popleft()
+
+        if front.data == target:
+          targetNode = front
+
+        if front.left:
+          q.append(front.left)
+          pm[front.left] = front
+
+        if front.right:
+          q.append(front.right)
+          pm[front.right] = front
+
+      return targetNode
+
+    def burnTree(targetNode, pm):
+      visited = {}
+
+      q = deque()  # currently set on fire nodes.
+
+      T = 0
+      q.append(targetNode)
+      visited[targetNode] = 1
+
+      while q:
+        size = len(q)
+        isFireSpreaded = False
+        for i in range(size):
+          front = q.popleft()
+          if front.left and front.left not in visited:
+            q.append(front.left)
+            visited[front.left] = 1
+            isFireSpreaded = True
+
+          if front.right and front.right not in visited:
+            q.append(front.right)
+            visited[front.right] = 1
+            isFireSpreaded = True
+
+          if pm[front] and pm[front] not in visited:
+            q.append(pm[front])
+            visited[pm[front]] = 1
+            isFireSpreaded = True
+
+        if isFireSpreaded:
+          T += 1
+
+      return T
+
+    # code here
+    parent_map = {}
+    targetNode = findTargetNode(root, parent_map, target)
+    return burnTree(targetNode, parent_map)
+
+  def duplicate_subtrees(self, root):
+    """
+    652: Leetcode -> find duplicate subtrees.
+    """
+
+    def solve(root, ans, mapping):
+      if not root:
+        return "N"
+
+      curr = str(root.val)
+      ls = solve(root.left, ans, mapping)
+      rs = solve(root.right, ans, mapping)
+
+      string = curr + "," + ls + "," + rs
+
+      if string in mapping:
+        if mapping[string] == 1:
+          ans.append(root)
+        mapping[string] += 1
+      else:
+        mapping[string] = 1
+
+      return string
+
+    ans = []
+    mapping = {}
+    solve(root, ans, mapping)
+    return ans
