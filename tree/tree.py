@@ -72,8 +72,8 @@ class Tree:
     if not root:
       return
 
-    self.postorder(self.left)
-    self.portorder(self.right)
+    self.postorder(root.left)
+    self.postorder(root.right)
     print(root.data)
 
   def level_order_traversal(self, root):
@@ -129,7 +129,6 @@ class Tree:
           curr = curr.right
     print(ans)
     return ans
-        
 
   def print_tree_lot(self, root):
     """
