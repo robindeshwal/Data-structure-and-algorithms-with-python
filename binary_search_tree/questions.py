@@ -178,3 +178,91 @@ class Questions:
         e -= 1
 
     return False
+
+  def bst_into_DLL(self, root):
+    """
+    Leetcode -> convert Binary search tree to Doubly Linked list.
+    """
+
+    def solve(root, head):
+      # base case
+      if not root:
+        return
+
+      # right subtree into LL.
+      solve(root.right, head)
+
+      # attach root node.
+      root.right = head
+
+      if head:
+        head.left = root
+
+      # update head
+      head = root
+
+      #  left subtree ll.
+      solve(root.left, head)
+
+    head = None
+    solve(root, head)
+    return head
+
+  def DLL_to_bst(self):
+    """
+    """
+
+    def solve(head, n):
+      # base case
+      if n <= 0 or not head:
+        return None
+
+      leftSubtree = solve(head, (n // 2) - 1)
+
+      root = head
+      root.left = leftSubtree
+
+      head = head.right
+
+      # right part
+      root.right = solve(head, n // 2)
+      return root
+
+  def largest_bst(self, root):
+    """
+    GFG: Largest BST in Binary tree.
+
+    create -> (size, maxVal, minVal, validBST)
+    """
+
+    def solve(root, ans):
+      # base case
+      if not root:
+        return (0, -sys.maxsize - 1, sys.maxsize, True)
+
+      # left ans
+      leftAns = solve(root.left, ans)
+      rightAns = solve(root.right, ans)
+
+      # checking curr node ans
+      size = leftAns[0] + rightAns[0] + 1
+      maxVal = max(root.data, rightAns[1])
+      minVal = min(root.data, leftAns[2])
+
+      if leftAns[3] and rightAns[3] and \
+          (root.data > leftAns[1] and root.data < rightAns[2]):
+        validBST = True
+      else:
+        validBST = False
+
+      currNode = (size, maxVal, minVal, validBST)
+
+      if validBST:
+        ans[0] = max(ans[0], size)
+
+      return currNode
+
+    ans = [0]
+    solve(root, ans)
+
+    return ans[0]
