@@ -230,3 +230,121 @@ class Questions:
     sum = [0]
     solve(root, sum)
     return sum[0]
+
+  def flatten_bst_LL(self):
+    """
+    GFG: Flatten BST to sorted Linked list.
+    """
+
+    def inorder(root, prev):
+      if not root:
+        return
+      inorder(root.left, prev)
+      prev.left = None
+      prev.right = root
+      prev = root
+      inorder(root.right, prev)
+
+    def solve(root):
+      dummy = TreeNode(-1)
+      prev = dummy
+
+      inorder(root, prev)
+      prev.left = prev.right = None
+      root = dummy.right
+      return root
+
+  def flatten_bst_LL_d(self):
+    """
+    GFG: Flatten BST to sorted Linked list decressin order.
+    """
+
+  def replace_least_greater(self, arr):
+    """
+    GFG: Replace every element with the least greater element on its right.
+    """
+
+    def insert(root, val, succ):
+      if not root:
+        return TreeNode(val)
+
+      if val >= root.data:
+        root.right = insert(root.right, val, succ)
+      else:
+        succ[0] = root.data
+        root.left = insert(root.left, val, succ)
+
+      return root
+
+    # code here
+    n = len(arr)
+    ans = [-1] * n
+
+    root = None
+
+    for i in range(n - 1, -1, -1):
+      succ = [-1]
+      root = insert(root, arr[i], succ)
+      ans[i] = succ[0]
+
+    return ans
+
+  def valid_bst_preorder(self, A):
+    """
+    interview bit -> valid BST from preorder.
+    """
+
+    def helper(i, min_val, max_val, A):
+      if i[0] >= len(A):
+        return True
+
+      if A[i[0]] > min_val and A[i[0]] < max_val:
+        rootData = A[i[0]]
+        i[0] += 1
+        left_valid = helper(i, min_val, rootData, A)
+        right_valid = helper(i, rootData, max_val, A)
+        return left_valid and right_valid
+      else:
+        return False
+
+    min_val = -sys.maxsize - 1
+    max_val = sys.maxsize
+
+    i = [0]
+    return 1 if helper(i, min_val, max_val, A) else 0
+
+  def merge_two_bst(self, root1, root2):
+    """
+    GFG: Merge two BST's
+
+    method 1: inorder for both and then merge the arrays. and create bst again.
+
+    method 2: inorder traversal using stack, and keeping two pointer and merger
+    and make BST.
+    """
+    ans = []
+    sa = []
+    sb = []
+
+    a = root1
+    b = root2
+
+    while a or b or sa or sb:
+      while a:
+        sa.append(a)
+        a = a.left
+
+      while b:
+        sb.append(b)
+        b = b.left
+
+      if not sb or (sa and sa[-1].data <= sb[-1].data):
+        atop = sa.pop()
+        ans.append(atop.data)
+        a = atop.right
+      else:
+        btop = sb.pop()
+        ans.append(btop.data)
+        b = btop.right
+
+    return ans
