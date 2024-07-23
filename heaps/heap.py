@@ -27,7 +27,7 @@ class Heap:
     del self.arr[-1]
     self.size -= 1
 
-    # plase root data on its correct position.
+    # place root data on its correct position.
     index = 0
     while (index < self.size - 1):
       left = 2 * index + 1
