@@ -48,35 +48,6 @@ class Questions:
     print(min_heap[0])
     return min_heap[0]
 
-  def merge_two_heaps(self):
-    """
-    HW
-    """
-
-  def is_bst_heap(self, root):
-    """
-    GFG: Is Binary Tree Heap. => Is Complete binary tree is heap or not.
-    """
-
-    def solve(root):
-      # base case
-      if not root:
-        return (True, None)
-
-      if not root.left and not root.right:
-        return (True, root.data)
-
-      left = solve(root.left)
-      right = solve(root.right)
-
-      if (left[0] and right[0] and root.data > left[1]
-          and root.data > right[1]):
-        return (True, root.data)
-      return (False, None)
-
-    ans = solve(root)
-    return ans[0]
-
   def convert_bst_max_heap(self):
     """
     GFG: BST to max heap
@@ -319,7 +290,52 @@ class Questions:
 
     return ans
 
-  def median_in_stream(self):
+  def median_finder(self):
     """
     295: Leetcode -> Find Median from Data Stream
     """
+
+    class MedianFinder:
+
+      def __init__(self):
+        self.min_heap = []
+        self.max_heap = []
+
+      def addNum(self, num: int) -> None:
+        print("starting : ", num)
+        if len(self.max_heap) == len(self.min_heap):
+          if num > self.findMedian():
+            heapq.heappush(self.min_heap, num)
+          else:
+            heapq.heappush(self.max_heap, -num)
+
+        elif len(self.max_heap) > len(self.min_heap):
+          if num > self.findMedian():
+            heapq.heappush(self.min_heap, num)
+          else:
+            maxTop = -heapq.heappop(self.max_heap)
+            heapq.heappush(self.min_heap, maxTop)
+            heapq.heappush(self.max_heap, -num)
+
+        else:
+          if num > self.findMedian():
+            minTop = heapq.heappop(self.min_heap)
+            heapq.heappush(self.max_heap, -minTop)
+            heapq.heappush(self.min_heap, num)
+          else:
+            heapq.heappush(self.max_heap, -num)
+
+      def findMedian(self) -> float:
+        median = 0.0
+        if (self.min_heap and self.max_heap) \
+                and len(self.max_heap) == len(self.min_heap):
+          median = (-self.max_heap[0] + self.min_heap[0]) / 2
+
+        elif self.max_heap and len(self.max_heap) > len(self.min_heap):
+          median = float(-self.max_heap[0])
+
+        else:
+          if self.min_heap:
+            median = float(self.min_heap[0])
+
+        return median
