@@ -14,7 +14,8 @@
 # from tree import main
 # from binary_search_tree import main
 # from heaps import main
-from hashmaps_and_tries import main
+# from hashmaps import main
+from tries import main
 
 if __name__ == "__main__":
   pass
