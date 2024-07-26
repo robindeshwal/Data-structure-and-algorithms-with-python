@@ -4,6 +4,8 @@ class TrieNode:
     self.data = data
     self.children = {}
     self.isTerminal = False
+    self.count = 0  # used for specific question.
+    self.index = -1  # used for specific question.
 
 
 class Trie:

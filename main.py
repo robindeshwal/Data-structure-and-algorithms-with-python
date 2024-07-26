@@ -15,7 +15,8 @@
 # from binary_search_tree import main
 # from heaps import main
 # from hashmaps import main
-from tries import main
+# from tries import main
+from dp import main
 
 if __name__ == "__main__":
   pass
