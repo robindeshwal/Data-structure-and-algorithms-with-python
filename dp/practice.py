@@ -13,7 +13,7 @@ class Practice:
       ans = recursion(n - 1) + recursion(n - 2)
       return ans
 
-    def topDown(n, dp):
+    def memoization(n, dp):
       # base case:
       if n == 1 or n == 0:
         return n
@@ -22,7 +22,7 @@ class Practice:
       if dp[n] != -1:
         return dp[n]
 
-      dp[n] = topDown(n - 1, dp) + topDown(n - 2, dp)
+      dp[n] = memoization(n - 1, dp) + memoization(n - 2, dp)
 
       return dp[n]
 
@@ -66,8 +66,8 @@ class Practice:
     # return recursion(n)
 
     # dp = [-1]*(n+1)
-    # return topDown(n, dp)
+    # return memoization(n, dp)
 
     # return bottomUp(n)
 
-    return space_optimisation(n)
+    return space_optimisation(num)
