@@ -17,9 +17,9 @@
 # from hashmaps import main
 # from tries import main
 # from dp import main
-# from graph import main
-from greedy import main
-from sliding_window import main
+from graph import main
+# from greedy import main
+# from sliding_window import main
 
 if __name__ == "__main__":
   pass

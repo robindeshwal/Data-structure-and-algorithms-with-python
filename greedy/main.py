@@ -1,4 +1,4 @@
-from questions import Questions
+from greedy.questions import Questions
 
 ques = Questions()
 # ques.
